@@ -49,38 +49,49 @@ def caption_creation(surface = screen, window_width = 1000, window_height = 800)
     x = x1 + h
     y = y1 + h 
     for i in range(N):
-        f1 = pygame.font.Font(None, 30)
-        pygame.font.SysFont('arial', 72)
-        text1 = f1.render(str(i+1), 1, WHITE)
-        text2 = f1.render(s[i], 1, WHITE)
-        screen.blit(text1, (x, y1))
-        screen.blit(text2, (x1, y))
+        write(str(i+1), x, y1)
+        write(s[i], x1, y)
         x += h
         y += h
     
-def event_handler():
+def event_handler(cells:list):
     '''
-    gives the address of cell where mouse has been pressed
+    changes the state of a cell, if one has been pressed on
+    or must write that one had been killed already
+    
     
     '''
-    (x, y) = pygame.mouse.get_pos()
-    i = x // 60
-    j = y //60
-    return (i, j)
+    if event.type == pygame.MOUSEBUTTONDOWN:
+            (x, y) = pygame.mouse.get_pos()
+            i = (x - 300) // 60
+            j = (y - 100) //60
+            if 299 < x < 901 and 99 < y < 701:
+                i = (x - 300) // 60
+                j = (y - 100) //60
+                if (cells[i][j]).state > 1 :
+                    write('It had been already pressed on', 30, 100)
+                else:
+                    Cell.nowdead(cells[i][j])
+
+def write(signature:str, x, y, color = (255, 255, 255)):
+    f1 = pygame.font.Font(None, 30)
+    pygame.font.SysFont('arial', 72)
+    text1 = f1.render(signature, 1, color)
+    screen.blit(text1, (x, y))  
     
+     
 class Cell:
     def __init__(self, i, j, state = 0):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
-        j - seconf number of the cell in array
+        j - second number of the cell in array
         state describes if the cell contains ship, whether it's dead etc.
         0 - empty
         1 - has ship in it and is alive
         2 - empty, now dead
         3 - had ship in it, now dead
-        x - position of the top left corner 
-        y - position of the top left corner
+        x, y - position of the top left corner 
         """
         self.i = i
         self.j = j
@@ -93,10 +104,10 @@ class Cell:
         
 cells = []
 for  a in range (10):
+    cells.append([])
     for b in range (10):
-        cells.append(Cell(a,b))  
+        cells[a].append(Cell(a, b, 0))  
 
-print(cells)
     
      
 pygame.display.update()
@@ -111,8 +122,8 @@ while not finished:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            event_handler
+        event_handler(cells)
+        
 
 pygame.quit()
 
