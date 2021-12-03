@@ -75,9 +75,7 @@ def event_handler(cells:list):
                     write('already pressed on', 30, 200)
                 else:
                     Cell.nowdead(cells[i][j])
-                    print(i, j)
                     x, y = (cells[i][j]).x,(cells[i][j]).y
-                    print(x, y)
                     pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
                     pygame.draw.line(screen, (255,0,0), (x, y+60), (x+60, y))
 
@@ -89,21 +87,25 @@ def write(signature:str, x, y, color = (255, 255, 255)):
     
      
 class Cell:
-    def __init__(self, i, j, state = 0):
+    def __init__(self, i, j, state = 0, ship = 0):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
         j - second number of the cell in array
-        state describes if the cell contains ship, whether it's dead etc.
+        state describes if the cell contains ship, whether it's dead etc.:
         0 - empty and has not been shot
         1 - has ship in it and is alive
         2 - empty, now dead
         3 - had ship in it, now dead
+        parameter 'ship' describes what type of ship lies in the cell:
+        0 - none
+        else - equals to number of decks
         x, y - position of the top left corner 
         """
         self.i = i
         self.j = j
         self.state = state
+        self.ship = ship
         self.x = 300 + 60 * i
         self.y = 100 + 60 * j
     
@@ -115,7 +117,7 @@ cells = []
 for  a in range (10):
     cells.append([])
     for b in range (10):
-        cells[a].append(Cell(a, b, 0))  
+        cells[a].append(Cell(a, b))  
 
     
      
