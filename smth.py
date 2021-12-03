@@ -13,9 +13,11 @@ pygame.init()
 
 FPS = 30
 screen = pygame.display.set_mode((window_width, window_height))
-color = (255, 255, 255)
+white = (255, 255, 255)
+red = (255, 0, 0)
 
-def field_creation(surface = screen, window_width = 1000, window_height = 800, color = color):
+
+def field_creation(surface = screen, window_width = 1000, window_height = 800, color = white):
     '''
     creates window 10 x 10
     '''
@@ -69,9 +71,15 @@ def event_handler(cells:list):
                 i = (x - 300) // 60
                 j = (y - 100) //60
                 if (cells[i][j]).state > 1 :
-                    write('It had been already pressed on', 30, 100)
+                    write('It had been', 30, 100)
+                    write('already pressed on', 30, 200)
                 else:
                     Cell.nowdead(cells[i][j])
+                    print(i, j)
+                    x, y = (cells[i][j]).x,(cells[i][j]).y
+                    print(x, y)
+                    pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
+                    pygame.draw.line(screen, (255,0,0), (x, y+60), (x+60, y))
 
 def write(signature:str, x, y, color = (255, 255, 255)):
     f1 = pygame.font.Font(None, 30)
@@ -87,7 +95,7 @@ class Cell:
         i - first number of the cell in array
         j - second number of the cell in array
         state describes if the cell contains ship, whether it's dead etc.
-        0 - empty
+        0 - empty and has not been shot
         1 - has ship in it and is alive
         2 - empty, now dead
         3 - had ship in it, now dead
@@ -97,10 +105,11 @@ class Cell:
         self.j = j
         self.state = state
         self.x = 300 + 60 * i
-        self.y = 100 + 60 * i
+        self.y = 100 + 60 * j
     
     def nowdead(self):
         self.state += 2
+        
         
 cells = []
 for  a in range (10):
