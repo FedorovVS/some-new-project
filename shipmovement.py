@@ -3,9 +3,7 @@ import numpy
 from smth.py import field_creation
 from smth.py import caption_creation
 from smth.py import mousepos
-
-
-
+from smth.py import Cell
 
 
 
@@ -41,12 +39,11 @@ def shiphere(cells:list, position):
     else:
         for k in range (i, i-4, -1):
                 cells.[i][k].state = 1
+def        
             
-    
-    
-    
-    
-
+            
+            
+            
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
@@ -56,9 +53,12 @@ while not finished:
     clock.tick(FPS)
     field_creation(300, 100, 900, 700)
     field_creation(1000, 100, 1600, 700)
-    caption_creation(300, 100, 900, 700)
-    caption_creation(1000, 100, 1600, 700)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            #POSITION
+            if mousepos != 0:
+                shiphere(cells, position)
+
 
