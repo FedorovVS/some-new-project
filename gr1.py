@@ -44,7 +44,7 @@ class Ship (GraphObject):
         screen
         filename - имя файла со скином
         '''
-        super().__init__()
+        super().__init__(x0, y0, x1, y1, obj_type, screen)
 
         self.img = pygame.image.load(filename).convert_alpha()
         self.img = pygame.transform.scale(self.img, (self.x1-self.x0, self.y1-self.y0))
