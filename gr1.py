@@ -1,28 +1,54 @@
 import pygame 
 from pygame.draw import ellipse, circle, polygon, rect, line
 from random import randint, choice
+import time
 
 class GraphObject:
 
-    def __init__ (self, x0, y0, x1, y1, obj_type):
+    def __init__ (self, x0, y0, x1, y1, obj_type, screen):
+        '''
+        инициализация графического объекта
+
+        Args:
+        x0 y0 - координаты левого верхнего угла
+        x1 y1 - координаты правого нижнего угла
+        obj_type - тип объекта
+        screen
+        '''
         self.x0 = x0
-        self.y0 = y0
+        self.y0 = y1
         self.x1 = x1
-        self.y1 = y1
+        self.y1 = y0
         self.obj_type = obj_type
+        self.screen = screen
+        self.time0 = time.clock()
+        self.origin = pygame.Surface(x1-x0, y1-y0)
 
     def draw (self):
         pass
 
 class Ship (GraphObject):
+    '''
+    корбаль
 
-    def __init__(self, x0, y0, x1, y1, obj_type, filename, screen):
+    '''
+
+    def __init__(self, x0, y0, x1, y1, obj_type, screen, filename):
+        '''
+        инициализаци корабля
+
+        Args:
+        x0 y0 - координаты левого верхнего угла
+        x1 y1 - координаты правого нижнего угла
+        obj_type - тип объекта
+        screen
+        filename - имя файла со скином
+        '''
         super().__init__()
 
         self.img = pygame.image.load(filename).convert_alpha()
         self.img = pygame.transform.scale(self.img, (self.x1-self.x0, self.y1-self.y0))
         self.img.set_colorkey('#00FF00')
-        self.screen = screen
 
     def draw(self):
         super().draw()
