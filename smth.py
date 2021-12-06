@@ -1,8 +1,6 @@
 import pygame
 import numpy
 
-
-
 window_width = 1700
 """Ширина окна"""
 
@@ -14,6 +12,7 @@ pygame.init()
 FPS = 30
 screen = pygame.display.set_mode((window_width, window_height))
 white = (255, 255, 255)
+black = (0, 0, 0)
 red = (255, 0, 0)
 
 
@@ -31,6 +30,7 @@ def field_creation(x1, y1, x2, y2, color = white, surface = screen):
         pygame.draw.line(screen, color, (x1, y), (x2, y))
         x += h
         y += h
+    caption_creation(x1, y1, x2, y2)
     
     
 def caption_creation(x1, y1, x2, y2, surface = screen, window_width = 1000, window_height = 800):
@@ -50,7 +50,7 @@ def caption_creation(x1, y1, x2, y2, surface = screen, window_width = 1000, wind
         write(s[i], x1, y)
         x += h
         y += h
-    
+
 def event_handler(cells:list):
     '''
     changes the state of a cell, if one has been pressed on
@@ -58,23 +58,21 @@ def event_handler(cells:list):
     
     
     '''
-    
+    if mousepos(cells) != 0:      
+        one = mousepos(cells)
+        one.lighten()
     if event.type == pygame.MOUSEBUTTONDOWN:
-            (x, y) = pygame.mouse.get_pos()
-            minx = cells[0][0].x
-            maxx = cells[len(cells)-1][0].x 
-            if minx-1 < x < maxx + 61 and 99 < y < 701:
-                i = (x - minx) // 60
-                j = (y - 100) //60
-                if (cells[i][j]).state > 1 :
-                    write('It had been', 30, 100)
-                    write('already pressed on', 30, 130)
-                else:
-                    Cell.nowdead(cells[i][j])
-                    x, y = (cells[i][j]).x,(cells[i][j]).y
-                    #supposed to be fire, may be a marker
-                    pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
-                    pygame.draw.line(screen, (255,0,0), (x, y+60), (x+60, y))
+        if mousepos(cells) != 0:      
+            one = mousepos(cells)
+            if one.state > 1:
+                write('It had been', 30, 100)
+                write('already pressed on', 30, 130)
+            else:
+                mousepos(cells).nowdead()
+                x, y = one.x,one.y
+                #supposed to be fire, may be a marker
+                pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
+                pygame.draw.line(screen, (255,0,0), (x, y+60), (x+60, y))
 
 def write(signature:str, x, y, color = (255, 255, 255)):
     f1 = pygame.font.Font(None, 30)
@@ -82,20 +80,17 @@ def write(signature:str, x, y, color = (255, 255, 255)):
     text1 = f1.render(signature, 1, color)
     screen.blit(text1, (x, y))  
     
-def mousepos(cells:list, enemycells = []):
+def mousepos(cells:list):
     (x, y) = pygame.mouse.get_pos()
-    xmin = cells[0][0]
-    xmax = cells[len(cells)-1][0]
-    if xmin - 1 < x < xmax + 1  and 99 < y < 701:
-        i = (x - 300) // 60
-        j = (y - 100) //60
-        return cells[i][j]
-    xmin = enemycells[0][0]
-    xmax = cells[len(cells)-1][0]
-    elif xmin - 1 < x < xmax + 1  and 99 < y < 701:
-        i = (x - 300) // 60
-        j = (y - 100) //60
-        return enemycells[i][j]
+    if 99 < y < 701:
+        xmin = cells[0][0].x
+        xmax = cells[len(cells)-1][0].x
+        if xmin - 1 < x < xmax + 61:
+            i = (x - 1 - xmin) // 60
+            j = (y - 100) //60
+            return cells[i][j]
+        else:
+            return 0    
     else:
         return 0
         
@@ -123,9 +118,16 @@ class Cell:
     
     def nowdead(self):
         self.state += 2
+        x = self.x
+        y = self.y
+        pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
+        pygame.draw.line(screen, (255, 0, 0), (x, y+60), (x+60, y))
         
-        
-        
+    def lighten(self):
+        additional_surface = pygame.Surface((60, 60))
+        additional_surface.set_alpha(100)
+        additional_surface.fill((127, 255, 212))
+        screen.blit(additional_surface, (self.x, self.y))     
         
 cells = []
 for  a in range (10):
@@ -140,6 +142,7 @@ for  a in range (10):
     
      
 pygame.display.update()
+screen.fill(black)
 clock = pygame.time.Clock()
 finished = False
 
@@ -148,9 +151,8 @@ while not finished:
     clock.tick(FPS)
     field_creation(300, 100, 900, 700)
     field_creation(1000, 100, 1600, 700)
-    caption_creation(300, 100, 900, 700)
-    caption_creation(1000, 100, 1600, 700)
     for event in pygame.event.get():
+        cells[0][0].lighten()
         if event.type == pygame.QUIT:
             finished = True
         event_handler(cells)
