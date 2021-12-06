@@ -16,12 +16,12 @@ class GraphObject:
         screen
         '''
         self.x0 = x0
-        self.y0 = y1
+        self.y0 = y0
         self.x1 = x1
-        self.y1 = y0
+        self.y1 = y1
         self.obj_type = obj_type
         self.screen = screen
-        self.time0 = time.clock()
+        self.time0 = time.time()
         self.origin = pygame.Surface(x1-x0, y1-y0)
 
     def draw (self):
@@ -67,9 +67,15 @@ class Water (GraphObject):
         W = self.x1 - self.x0
         H = self.y1 - self.y0
 
-        for i in range(Nx):
-            for j in range(Ny):
-                rect(self.screen, choice(COLORS), (i*W/Nx, j*H/Ny, W/Nx, H/Ny))
+        time_difference = time.time() - self.time0
+
+        if time_difference > 0.5:
+
+            for i in range(Nx):
+                for j in range(Ny):
+                    rect(self.origin, choice(COLORS), (i*W/Nx, j*H/Ny, W/Nx, H/Ny))
+            self.time0 = time.time()
+        self.screen.blit(self.origin, self.x0, self.y0)
 
 class Stressing (GraphObject):
 
