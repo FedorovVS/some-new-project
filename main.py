@@ -44,10 +44,15 @@ while not finished:
             finished = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             number = whichship(ships)
-            if event.type == pygame.MOUSEBUTTONUP:
-                placetheship(ships[number])
+        if event.type == pygame.MOUSEBUTTONUP:
+            placetheship(ships[number])
+            number = -1
     if number != -1:
         ships[number].drawShadow()
+        if pygame.key.get_pressed()[pygame.K_LEFT] == 1:
+            ships[number].rotate(90)
+        if pygame.key.get_pressed()[pygame.K_RIGHT] == 1:
+            ships[number].rotate(180)
             
 '''            
 finished = False

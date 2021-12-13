@@ -44,9 +44,9 @@ def  placetheship(ship:Ship):
     
     '''
     x, y = pygame.mouse.get_pos()
-    ship.x0 = x - x%60 -120
-    ship.y0 = y - y%60 - 30
-    ship.x1 = x - x%60 + 120
+    ship.x0 = x - x%60 -60
+    ship.y0 = y - y%60 - 20
+    ship.x1 = x - x%60 + 180
     ship.y1 = y - y%60 + 30
     
 def whichship(ships):

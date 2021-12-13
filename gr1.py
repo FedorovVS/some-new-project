@@ -64,6 +64,13 @@ class Ship (GraphObject):
         self.img.set_alpha(100)
         position = pygame.mouse.get_pos()
         self.screen.blit(self.img, (position[0]-(self.x1-self.x0)/2 ,position[1]-(self.y1-self.y0)/2))
+        
+    def rotate(self, angle):
+        '''
+        rotates the ship
+        
+        '''
+        self.img = pygame.transform.rotate(self.img, angle)
 
 
 class Water (GraphObject):
