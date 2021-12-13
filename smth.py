@@ -17,7 +17,7 @@ black = (0, 0, 0)
 red = (255, 0, 0)
 
 
-def field_creation(x1, y1, x2, y2, color = white, surface = screen):
+def field_creation(x1, y1, x2, y2, screen, color = white):
     '''
     creates window 10 x 10
     '''
@@ -31,10 +31,10 @@ def field_creation(x1, y1, x2, y2, color = white, surface = screen):
         pygame.draw.line(screen, color, (x1, y), (x2, y))
         x += h
         y += h
-    caption_creation(x1, y1, x2, y2)
+    caption_creation(x1, y1, x2, y2, screen)
     
     
-def caption_creation(x1, y1, x2, y2, surface = screen, window_width = 1000, window_height = 800):
+def caption_creation(x1, y1, x2, y2, screen, window_width = 1000, window_height = 800):
     '''
     writes numbers and letters on the left and top side of the field
     '''
@@ -47,8 +47,8 @@ def caption_creation(x1, y1, x2, y2, surface = screen, window_width = 1000, wind
     x = x1 + h
     y = y1 + h 
     for i in range(N):
-        write(str(i+1), x, y1)
-        write(s[i], x1, y)
+        write(screen, str(i+1), x, y1)
+        write(screen, s[i], x1, y)
         x += h
         y += h
 
@@ -65,8 +65,8 @@ def event_handler(cells:list):
         if mousepos(cells) != 0:      
             one = mousepos(cells)
             if one.state > 1:
-                write('It had been', 30, 100)
-                write('already pressed on', 30, 130)
+                write(screen, 'It had been', 30, 100)
+                write(screen, 'already pressed on', 30, 130)
             else:
                 mousepos(cells).nowdead()
                 x, y = one.x,one.y
@@ -74,9 +74,9 @@ def event_handler(cells:list):
                 pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
                 pygame.draw.line(screen, (255,0,0), (x, y+60), (x+60, y))
 
-def write(signature:str, x, y, color = (255, 255, 255)):
+def write(screen, signature:str, x, y, color = (255, 255, 255)):
     '''
-    writes what you wnat
+    writes what you want
     signature is ur text
     x, y define the position of the very first letter,
     color is the color of text( white automatically)
