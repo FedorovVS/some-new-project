@@ -1,5 +1,6 @@
 import pygame
 import numpy
+from gr1 import Ship
 
 window_width = 1700
 """Ширина окна"""
@@ -75,6 +76,12 @@ def event_handler(cells:list):
                 pygame.draw.line(screen, (255,0,0), (x, y+60), (x+60, y))
 
 def write(signature:str, x, y, color = (255, 255, 255)):
+    '''
+    writes what you wnat
+    signature is ur text
+    x, y define the position of the very first letter,
+    color is the color of text( white automatically)
+    '''
     f1 = pygame.font.Font(None, 30)
     pygame.font.SysFont('arial', 72)
     text1 = f1.render(signature, 1, color)
@@ -93,10 +100,11 @@ def mousepos(cells:list):
             return 0    
     else:
         return 0
+    
         
      
 class Cell:
-    def __init__(self, i, j, x, y, state = 0, ship = 0):
+    def __init__(self, i, j, x, y, state = 0, ship = 0, mouse = 0 ):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
@@ -108,6 +116,7 @@ class Cell:
         3 - had ship in it, now dead
         parameter 'ship' describes what type of ship lies in the cell
         x, y - position of the top left corner 
+        mouse - shows whether the mouse is on the cell
         """
         self.i = i
         self.j = j
@@ -115,6 +124,8 @@ class Cell:
         self.ship = ship
         self.x = x
         self.y = y
+        self.mouse = mouse
+        self.surface = pygame.Surface((60, 60))  
     
     def nowdead(self):
         self.state += 2
@@ -123,11 +134,17 @@ class Cell:
         pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
         pygame.draw.line(screen, (255, 0, 0), (x, y+60), (x+60, y))
         
-    def lighten(self):
-        additional_surface = pygame.Surface((60, 60))
-        additional_surface.set_alpha(100)
-        additional_surface.fill((127, 255, 212))
-        screen.blit(additional_surface, (self.x, self.y))     
+    def lighten(self, screen = screen):
+        self.surface.set_alpha(100 * self.mouse)
+        self.surface.fill((127, 255, 212))
+        screen.blit(self.surface, (self.x, self.y)) 
+        
+        
+    def darken(self, screen = screen):
+        self.surface.set_alpha(100 * self.mouse)
+        self.surface.fill((127, 255, 212))
+        screen.blit(self.surface, (self.x, self.y))
+             
         
 cells = []
 for  a in range (10):
@@ -143,16 +160,17 @@ for  a in range (10):
      
 pygame.display.update()
 screen.fill(black)
+#myship = Ship(0, 0, 240, 60, 1, screen, '1.png')
 clock = pygame.time.Clock()
 finished = False
 
 while not finished:
     pygame.display.update()
     clock.tick(FPS)
+    #myship.draw()
     field_creation(300, 100, 900, 700)
     field_creation(1000, 100, 1600, 700)
     for event in pygame.event.get():
-        cells[0][0].lighten()
         if event.type == pygame.QUIT:
             finished = True
         event_handler(cells)
