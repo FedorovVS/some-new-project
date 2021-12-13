@@ -12,7 +12,7 @@ window_height = 800
 
 pygame.init()
 
-FPS = 30
+FPS = 10
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
@@ -24,19 +24,14 @@ clock = pygame.time.Clock()
 finished = False
 #shipdefinition
 number = -1
-'''
-ship1 = Ship(0, 0, 240, 60, 1, screen, '1.png', 0)
-ship2 = Ship(0, 60, 240, 120, 1, screen, '2.png', 0)
-ship3= Ship(0, 120, 240, 180, 1, screen, '3.png', 0)
-ship4 = Ship(0, 180, 240, 240, 1, screen, '4.png', 0)
-ship5 = Ship(0, 180, 240, 240, 1, screen, '4.png', 0)
-ships = [ship1, ship2, ship3, ship4, ship5]
-'''
 ships = []
 for i in range (0, 5):
-    ships.append(Ship(0, i*60, 240, (i+1) * 60, 1, screen, str(i+1) +'.png', 0))
+    k = i + 1
+    if i == 4:
+        k = 1
+    ships.append(Ship(0, i*60, 240, (i+1) * 60, 1, screen, '{name}.png'.format(name=str(k)), 0))
 #shippositioning:
-while not finished:
+while not finished: 
     pygame.display.update()
     clock.tick(FPS)
     screen.fill(black)
@@ -49,7 +44,7 @@ while not finished:
             finished = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             number = whichship(ships)
-        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONUP:
                 placetheship(ships[number])
     if number != -1:
         ships[number].drawShadow()
