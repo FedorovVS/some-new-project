@@ -30,6 +30,17 @@ for i in range (0, 5):
     if i == 4:
         k = 1
     ships.append(Ship(0, i*60, 240, (i+1) * 60, 1, screen, '{name}.png'.format(name=str(k)), 0))
+#fielddefinition
+cells = []
+for  a in range (10):
+    cells.append([])
+    for b in range (10):
+        cells[a].append(Cell(a, b, 300 + 60 * a, 100 + 60 * b))
+enemycells = []
+for  a in range (10):
+    enemycells.append([])
+    for b in range (10):
+        enemycells[a].append(Cell(a, b, 1000 + 60 * a, 100 + 60 * b))
 #shippositioning:
 while not finished: 
     pygame.display.update()
@@ -45,7 +56,8 @@ while not finished:
         if event.type == pygame.MOUSEBUTTONDOWN:
             number = whichship(ships)
         if event.type == pygame.MOUSEBUTTONUP:
-            placetheship(ships[number])
+            x, y = mousepos(cells).x, mousepos(cells).y
+            placetheship(ships[number], x, y)
             number = -1
     if number != -1:
         ships[number].drawShadow()

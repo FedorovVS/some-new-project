@@ -39,15 +39,23 @@ def shiphere(cells:list, position):
     else:
         for k in range (i, j-4, -1):
                 cells[i][k].state = 1
-def  placetheship(ship:Ship):
+def  placetheship(ship:Ship, x, y):
     '''
     
-    '''
-    x, y = pygame.mouse.get_pos()
-    ship.x0 = x - x%60 -60
-    ship.y0 = y - y%60 - 20
-    ship.x1 = x - x%60 + 180
-    ship.y1 = y - y%60 + 30
+    '''    
+    ship.x0 = x
+    ship.y0 = y
+    #100 - left border of the field
+    if ship.turn_flag == 0:
+        ship.x1 = x  + 240
+        #4 cells
+        ship.y1 = y  + 60
+        #1 cell 
+    if ship.turn_flag == 1:
+        ship.y1 = y  + 240
+        #4 cells
+        ship.x1 = x + 60
+        #1 cell 
     
 def whichship(ships):
     '''

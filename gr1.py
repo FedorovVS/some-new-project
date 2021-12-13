@@ -40,13 +40,12 @@ class Ship (GraphObject):
         obj_type - тип объекта
         screen
         filename - имя файла со скином
-        turn_flag - поворот (вертикальная ориентация)
+        turn_flag - поворот (вертикальная ориентация - 1, else - 0)
         '''
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
         self.img = pygame.image.load(filename).convert_alpha()
-        if turn_flag:
-            self.img = pygame.transform.rotate(self.img, 90)
+        self.turn_flag = turn_flag
         self.img = pygame.transform.scale(self.img, (self.x1-self.x0, self.y1-self.y0))
         self.img.set_colorkey('#00FF00')
 
@@ -63,7 +62,7 @@ class Ship (GraphObject):
         '''
         self.img.set_alpha(100)
         position = pygame.mouse.get_pos()
-        self.screen.blit(self.img, (position[0]-(self.x1-self.x0)/2 ,position[1]-(self.y1-self.y0)/2))
+        self.screen.blit(self.img, (position[0] ,position[1]))
         
     def rotate(self, angle):
         '''
@@ -71,6 +70,7 @@ class Ship (GraphObject):
         
         '''
         self.img = pygame.transform.rotate(self.img, angle)
+        self.turn_flag  = (self.turn_flag + 1) % 2
 
 
 class Water (GraphObject):
