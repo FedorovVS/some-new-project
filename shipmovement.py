@@ -1,20 +1,20 @@
 import pygame
 import numpy
-from smth.py import field_creation
-from smth.py import caption_creation
-from smth.py import mousepos
-from smth.py import Cell
+from smth import field_creation
+from smth import caption_creation
+from smth import mousepos
+from smth import Cell
+from gr1 import Ship
 
 
 
 
 window_width = 1700
 """Ширина окна"""
-
+FPS = 30
 window_height = 800
 """Высота окна"""
 
-pygame.init()
 
 def shiphere(cells:list, position):
     '''
@@ -29,36 +29,38 @@ def shiphere(cells:list, position):
     i, j = mousepos(cells).i, mousepos(cells).j
     if position == 1:
         for k in range (i, i + 4):
-            cells.[k][j].state = 1
+            cells[k][j].state = 1
     if position ==3:
         for k in range (i, i - 4, -1):
-            cells.[k][j].state = 1
+            cells[k][j].state = 1
     if position == 4:
         for k in range (i, i + 4):
-            cells.[i][k].state = 1
+            cells[i][k].state = 1
     else:
         for k in range (i, i-4, -1):
-                cells.[i][k].state = 1
-def        
-            
-            
-            
-            
-pygame.display.update()
-clock = pygame.time.Clock()
-finished = False
+                cells[i][k].state = 1
+def  placetheship(ship:Ship):
+    '''
+    
+    '''
+    x, y = pygame.mouse.get_pos()
+    ship.x0 = x
+    ship.y0 = y
+    ship.x1 = x + 240
+    ship.y1 = y + 60
+    ship.draw()
+    
+def whichship(ships):
+    '''
+    
+    '''
+    x, y = pygame.mouse.get_pos()
+    for i, ship in enumerate(ships):
+        if ship.x0 <= x <= ship.x1:
+            if ship.y0 <= y <= ship.y1:
+                return i
+    
 
-while not finished:
-    pygame.display.update()
-    clock.tick(FPS)
-    field_creation(300, 100, 900, 700)
-    field_creation(1000, 100, 1600, 700)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            finished = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            #POSITION
-            if mousepos != 0:
-                shiphere(cells, position)
 
+pygame.quit()
 

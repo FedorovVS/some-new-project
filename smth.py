@@ -61,7 +61,6 @@ def event_handler(cells:list):
     '''
     if mousepos(cells) != 0:      
         one = mousepos(cells)
-        one.lighten()
     if event.type == pygame.MOUSEBUTTONDOWN:
         if mousepos(cells) != 0:      
             one = mousepos(cells)
@@ -104,7 +103,7 @@ def mousepos(cells:list):
         
      
 class Cell:
-    def __init__(self, i, j, x, y, state = 0, ship = 0, mouse = 0 ):
+    def __init__(self, i, j, x, y, state = 0, ship = 0):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
@@ -124,8 +123,6 @@ class Cell:
         self.ship = ship
         self.x = x
         self.y = y
-        self.mouse = mouse
-        self.surface = pygame.Surface((60, 60))  
     
     def nowdead(self):
         self.state += 2
@@ -134,16 +131,6 @@ class Cell:
         pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
         pygame.draw.line(screen, (255, 0, 0), (x, y+60), (x+60, y))
         
-    def lighten(self, screen = screen):
-        self.surface.set_alpha(100 * self.mouse)
-        self.surface.fill((127, 255, 212))
-        screen.blit(self.surface, (self.x, self.y)) 
-        
-        
-    def darken(self, screen = screen):
-        self.surface.set_alpha(100 * self.mouse)
-        self.surface.fill((127, 255, 212))
-        screen.blit(self.surface, (self.x, self.y))
              
         
 cells = []
@@ -157,17 +144,15 @@ for  a in range (10):
     for b in range (10):
         enemycells[a].append(Cell(a, b, 1000 + 60 * a, 100 + 60 * b))
     
-     
+'''     
 pygame.display.update()
 screen.fill(black)
-#myship = Ship(0, 0, 240, 60, 1, screen, '1.png')
 clock = pygame.time.Clock()
 finished = False
 
 while not finished:
     pygame.display.update()
     clock.tick(FPS)
-    #myship.draw()
     field_creation(300, 100, 900, 700)
     field_creation(1000, 100, 1600, 700)
     for event in pygame.event.get():
@@ -177,4 +162,4 @@ while not finished:
         event_handler(enemycells)
 
 pygame.quit()
-
+'''
