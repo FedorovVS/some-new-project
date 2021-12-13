@@ -8,7 +8,6 @@ class GraphObject:
     def __init__ (self, x0, y0, x1, y1, obj_type, screen):
         '''
         инициализация графического объекта
-
         Args:
         x0 y0 - координаты левого верхнего угла
         x1 y1 - координаты правого нижнего угла
@@ -34,8 +33,7 @@ class Ship (GraphObject):
 
     def __init__(self, x0, y0, x1, y1, obj_type, screen, filename, turn_flag):
         '''
-        инициализаци корабля
-
+        инициализация корабля
         Args:
         x0 y0 - координаты левого верхнего угла
         x1 y1 - координаты правого нижнего угла
@@ -58,6 +56,15 @@ class Ship (GraphObject):
         '''
         super().draw()
         self.screen.blit(self.img, (self.x0, self.y0))
+
+    def drawShadow(self):
+        '''
+        Функция рисования тени корабля
+        '''
+        self.img.set_alpha(100)
+        position = pygame.mouse.get_pos()
+        self.screen.blit(self.img, (position[0]-(self.x1-self.x0)/2 ,position[1]-(self.y1-self.y0)/2))
+
 
 class Water (GraphObject):
     '''
@@ -250,7 +257,7 @@ class Button (GraphObject):
         rect(self.screen, '#000080', (self.x0, self.y0, self.x1-self.x0, self.y1-self.y0))
 
         font = pygame.font.SysFont('ComicSansMs', 30)
-        screen.blit(font.render(self.text, 0, '#9932cc'), (self.x0+self.border, self.y0+self.border))
+        self.screen.blit(font.render(self.text, 0, '#9932cc'), (self.x0+self.border, self.y0+self.border))
 
 class Text (GraphObject):
     def __init__(self, x0, y0, x1, y1, obj_type, screen, text):
@@ -261,52 +268,4 @@ class Text (GraphObject):
     def draw(self):
 
         font = pygame.font.SysFont('ComicSansMs', 30)
-        screen.blit(font.render(self.text, 0, '#9932cc'), (self.x0+self.border, self.y0+self.border))
-
-class ShipShadow(Ship):
-
-    def draw (self):
-        self.img.set_alpha(100)
-        position = pygame.mouse.get_pos()
-        self.screen.blit(self.img, (position[0]-(self.x1-self.x0)/2 ,position[1]-(self.y1-self.y0)/2))
-
-
-"""
-
-pygame.init()
-screen = pygame.display.set_mode((400, 400))
-FPS = 30
-
-#water = Water(0, 0, 400, 400, 1, screen)
-water = WaterBlock(0, 0, 400, 400, 1, screen)
-ship = ShipShadow(10, 10, 50, 170, 1, screen, '1.png', 1)
-stressing = Stressing(0, 0, 100, 40, 1, screen)
-e_check = EmptyCheck(0, 40, 100, 80, 1, screen)
-smoke = Smoke(10, 10, 200, 200, 1, screen)
-fire = Fire(0, 0, 400, 400, 1, screen)
-btn = Button(200, 200, 280, 240, 1, screen, 'some text')
-
-clock = pygame.time.Clock()
-finished = False
-
-while not finished:
-
-    screen.fill('#80daeb')
-
-    water.draw()
-    ship.draw()
-    stressing.draw()
-    e_check.draw()
-    fire.draw()
-    btn.draw()
-
-    clock.tick(FPS)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            finished = True
-
-    pygame.display.update()
-
-pygame.quit()
-
-"""
+        self.screen.blit(font.render(self.text, 0, '#9932cc'), (self.x0+self.border, self.y0+self.border))
