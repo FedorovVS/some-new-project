@@ -60,9 +60,12 @@ class Ship (GraphObject):
         '''
         Функция рисования тени корабля
         '''
+        '''- rot * (self.x1-self.x0)//2 '''
         self.img.set_alpha(100)
         position = pygame.mouse.get_pos()
-        self.screen.blit(self.img, (position[0] ,position[1] - (self.y1 - self.y0)//2))
+        rot = self.turn_flag
+        self.screen.blit(self.img, (position[0],position[1] - (1 - rot) *(self.y1-self.y0)//2))
+        
         
     def backtonormal(self):
         '''

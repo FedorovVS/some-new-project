@@ -61,10 +61,12 @@ while not finished:
         if event.type == pygame.MOUSEBUTTONDOWN:
             number = whichship(ships)
         if event.type == pygame.MOUSEBUTTONUP:
-            if placetheship(ships[number], mousepos(cells), cells, screen) == 1:
-                shiphere(cells,ships[number]) 
-            ships[number].backtonormal()
-            number = -1
+            cell = mousepos(cells)
+            if cell != 0:
+                if placetheship(ships[number], cell, cells, screen) == 1:
+                    shiphere(cells,ships[number]) 
+                ships[number].backtonormal()
+                number = -1
     if number != -1:
         ships[number].drawShadow()
         if pygame.key.get_pressed()[pygame.K_LEFT]:
