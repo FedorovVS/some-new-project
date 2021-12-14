@@ -1,9 +1,6 @@
 import pygame
 import numpy
-from smth import field_creation
-from smth import caption_creation
-from smth import mousepos
-from smth import Cell
+from smth import field_creation, caption_creation, mousepos, Cell, write
 from gr1 import Ship
 
 
@@ -16,46 +13,66 @@ window_height = 800
 """Высота окна"""
 
 
-def shiphere(cells:list, position):
+def shiphere(cells:list, ship):
     '''
     position describes position of the ship
-    1 - 0 angle
-    2 - 90 degree 
-    3 - 180 degree
-    4 - 270 degree
+    
     
     '''
     mousepos(cells).state = 1
+    vertical = ship.turn_flag
     i, j = mousepos(cells).i, mousepos(cells).j
-    if position == 1:
+    if vertical == 0:
         for k in range (i, i + 4):
             cells[k][j].state = 1
-    if position ==3:
-        for k in range (i, i - 4, -1):
-            cells[k][j].state = 1
-    if position == 4:
+    if vertical == 1:
         for k in range (j, j + 4):
             cells[i][k].state = 1
-    else:
-        for k in range (i, j-4, -1):
-                cells[i][k].state = 1
-def  placetheship(ship:Ship, x, y):
+            
+def  placetheship(ship:Ship, cell:Cell, cells:list, screen):
     '''
-    
-    '''    
-    ship.x0 = x
-    ship.y0 = y
-    #100 - left border of the field
+    changes coordinates of the ship
+    '''   
+    i, j = cell.i, cell.j
+    notfree = 0
     if ship.turn_flag == 0:
-        ship.x1 = x  + 240
-        #4 cells
-        ship.y1 = y  + 60
-        #1 cell 
+        if i > 6:
+            notfree = 1
+        mini = max(i-1, 0)
+        maxi = min(i+5, 10)
+        for a in range (mini, maxi):
+            minj = max(0, j-1)
+            maxj = min(10, j+2)
+            for b in range (minj, maxj):
+                notfree += cells[a][b].state
     if ship.turn_flag == 1:
-        ship.y1 = y  + 240
+        if j > 6:
+            notfree = 1
+        minj = max(j-1, 0)
+        maxj = min(j+5, 10)
+        for b in range (minj, maxj):
+            mini = max(0, i-1)
+            maxi = min(10, i+2)
+            for a in range (mini, maxi):
+                notfree += cells[a][b].state
+    if notfree != 0:
+       pass
+       #may be write smth like "not possible"
+    if notfree == 0:
+        x, y = cell.x, cell.y
+        ship.x0 = x
+        ship.y0 = y
+        if ship.turn_flag == 0: 
+            ship.x1 = x  + 240
         #4 cells
-        ship.x1 = x + 60
+            ship.y1 = y  + 60
         #1 cell 
+        if ship.turn_flag == 1:
+            ship.y1 = y  + 240
+        #4 cells
+            ship.x1 = x + 60
+        #1 cell 
+        return 1
     
 def whichship(ships):
     '''

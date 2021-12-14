@@ -62,7 +62,14 @@ class Ship (GraphObject):
         '''
         self.img.set_alpha(100)
         position = pygame.mouse.get_pos()
-        self.screen.blit(self.img, (position[0] ,position[1]))
+        self.screen.blit(self.img, (position[0] ,position[1] - (self.y1 - self.y0)//2))
+        
+    def backtonormal(self):
+        '''
+        makes the picture of the ship full-coloured again
+        (fixes shadows)
+        '''
+        self.img.set_alpha(255)
         
     def rotate(self, angle):
         '''

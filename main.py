@@ -1,8 +1,8 @@
 import pygame
 import numpy
-from smth import field_creation, caption_creation, mousepos, Cell
+from smth import field_creation, caption_creation, mousepos, Cell, event_handler
 from gr1 import Ship
-from shipmovement import placetheship, whichship
+from shipmovement import placetheship, whichship, shiphere
 
 window_width = 1700
 """Ширина окна"""
@@ -12,7 +12,7 @@ window_height = 800
 
 pygame.init()
 
-FPS = 10
+FPS = 60
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
@@ -22,6 +22,7 @@ pygame.display.update()
 screen.fill(black)
 clock = pygame.time.Clock()
 finished = False
+
 #shipdefinition
 number = -1
 ships = []
@@ -30,6 +31,7 @@ for i in range (0, 5):
     if i == 4:
         k = 1
     ships.append(Ship(0, i*60, 240, (i+1) * 60, 1, screen, '{name}.png'.format(name=str(k)), 0))
+
 #fielddefinition
 cells = []
 for  a in range (10):
@@ -41,6 +43,7 @@ for  a in range (10):
     enemycells.append([])
     for b in range (10):
         enemycells[a].append(Cell(a, b, 1000 + 60 * a, 100 + 60 * b))
+
 #shippositioning:
 while not finished: 
     pygame.display.update()
@@ -53,17 +56,20 @@ while not finished:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
+        if pygame.key.get_pressed()[pygame.K_KP_ENTER]:
+            finished = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             number = whichship(ships)
         if event.type == pygame.MOUSEBUTTONUP:
-            x, y = mousepos(cells).x, mousepos(cells).y
-            placetheship(ships[number], x, y)
+            if placetheship(ships[number], mousepos(cells), cells, screen) == 1:
+                shiphere(cells,ships[number]) 
+            ships[number].backtonormal()
             number = -1
     if number != -1:
         ships[number].drawShadow()
-        if pygame.key.get_pressed()[pygame.K_LEFT] == 1:
+        if pygame.key.get_pressed()[pygame.K_LEFT]:
             ships[number].rotate(90)
-        if pygame.key.get_pressed()[pygame.K_RIGHT] == 1:
+        if pygame.key.get_pressed()[pygame.K_RIGHT]:
             ships[number].rotate(180)
             
 '''            
@@ -77,10 +83,7 @@ while not finished:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
-        
         event_handler(cells)
         event_handler(enemycells)
-
-
 '''
 pygame.quit()
