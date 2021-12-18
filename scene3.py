@@ -2,14 +2,11 @@ import pygame
 from pygame.draw import ellipse, circle, polygon, rect, line
 from gr1 import *
 
-#TODO: check usage of cells lists
-
-
 class Window():
     '''
     Класс окна приложения
     '''
-    def __init__(self, screen):
+    def __init__(self, screen, friendly_cells, enemy_cells):
         '''
         Инициализация объекта класса Window
         '''
@@ -56,6 +53,9 @@ class Window():
         Список графических сущностей
         '''
 
+        self.friendly_cells = friendly_cells
+        self.enemy_cells = enemy_cells
+
     def GR_draw_caption(self, x0, y0):
         '''
         GR рисование подписей к полю 10х10
@@ -97,7 +97,7 @@ class Window():
         '''
 
         for message in self.special_messages:
-            Text(x0, y0, 1000, 1000, 1, self.screen, message[0], message[2]).draw()
+            Text(x0, y0, 2000, 2000, 1, self.screen, message[0], message[2]).draw()
             if message[1]>0:
                 message[1] -= 1
             else:
@@ -110,13 +110,18 @@ class Window():
         '''
         self.screen.fill('#80daeb')
 
+        self.control_friendly_objects(self.friendly_cells, 30, 30)
+
         for object in self.graphic_objects:
             object.draw()
         
         self.GR_draw_caption(30, 30)
         self.GR_draw_checks(30, 30)
 
-        self.MG_message_manager(500, 0)
+        self.GR_draw_caption(530, 30)
+        self.GR_draw_checks(530, 30)
+
+        self.MG_message_manager(1030, 0)
 
     def mouse_position(self, cells:list, x0, y0):
         '''
@@ -142,7 +147,7 @@ class Window():
         active_cell : Cell - координаты активированной клетки в терминах дескретного поля
         '''
 
-        def check_cell (cells, i, j, i_prev = -1, j_prev = -1):
+        def check_cell (cells, i, j, i_prev=-1, j_prev=-1):
             cnt = 0
             if cells[i][j].state == 3:
                 cnt += 1
@@ -157,7 +162,7 @@ class Window():
             return cnt
         
 
-        def fire_cell (self, x0, y0, cells, i, j, i_prev = -1, j_prev = -1):
+        def fire_cell (self, x0, y0, cells, i, j, i_prev=-1, j_prev=-1):
 
             if cells[i][j].state == 3:
                 X = x0 + i*self.check_size
@@ -211,7 +216,7 @@ class Window():
 
         
 
-            # отсюда можно безопасно продолжить
+        # отсюда можно безопасно продолжить
 
 
 
@@ -223,13 +228,41 @@ class Window():
         event : pygame.event - событие
         '''
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            clicked_cell = self.mouse_position(cells, 30, 30)
+            clicked_cell = self.mouse_position(cells, 530, 30)
             if clicked_cell:
                 click_result = clicked_cell.change_state()
                 if click_result == 1:
                     self.special_messages.append(['Выберете другую клетку', 40, '#FF00FF'])
                 else:
-                    self.control_graphic_objects(30, 30, cells, clicked_cell)
+                    self.control_graphic_objects(530, 30, cells, clicked_cell)
+
+    def control_friendly_objects(self, cells, X0, Y0):
+
+        def check_object_list_for_coords(self, x0, y0, x1, y1):
+            for obj in self.graphic_objects:
+                if obj.x0 == x0 and obj.y0 == y0 and obj.x1 == x1 and obj.y1 == y1:
+                    return 1
+            
+            return 0
+
+        for i in range(10):
+            for j in range(10):
+                if cells[i][j].state == 2:
+                    if not check_object_list_for_coords(self, X0+i*self.check_size, Y0+j*self.check_size, X0+(i+1)*self.check_size, Y0+(j+1)*self.check_size):
+                        self.graphic_objects.append(EmptyCheck(X0+i*self.check_size, Y0+j*self.check_size, X0+(i+1)*self.check_size, Y0+(j+1)*self.check_size, 1, self.screen))
+                elif cells[i][j].state == 1 or cells[i][j].state == 3:
+                    x0 = X0+cells[i][j].ship_i*self.check_size
+                    y0 = Y0+cells[i][j].ship_j*self.check_size
+                    x1 = X0+(cells[i][j].ship_i+4)*self.check_size if not cells[i][j].ship_orientation else X0+(cells[i][j].ship_i+1)*self.check_size
+                    y1 = Y0+(cells[i][j].ship_j+4)*self.check_size if cells[i][j].ship_orientation else Y0+(cells[i][j].ship_j+1)*self.check_size
+                    if not check_object_list_for_coords(self, x0, y0, x1, y1):
+                        self.graphic_objects.append(Ship(x0, y0, x1, y1, 1, self.screen, str(cells[i][j].ship)+'.png', cells[i][j].ship_orientation))
+                    if cells[i][j].state == 3:
+                        if not check_object_list_for_coords(self, X0+i*self.check_size, Y0+j*self.check_size, X0+(i+1)*self.check_size, Y0+(j+1)*self.check_size):
+                            self.graphic_objects.append(Smoke(X0+i*self.check_size, Y0+j*self.check_size, X0+(i+1)*self.check_size, Y0+(j+1)*self.check_size, 1, self.screen))
+
+
+
                 
 
     def main_loop(self):
@@ -247,10 +280,10 @@ class Window():
                 if event.type == pygame.QUIT:
                     finished = True
                 else:
-                    self.MG_event_manager(cells, event)
+                    self.MG_event_manager(self.enemy_cells, event)
 
-class Cell:
-    def __init__(self, i, j, state = 0, ship = 0, ship_orientation = 0, ship_i = -1, ship_j = -1):
+class Cell3:
+    def __init__(self, i, j,  state = 0, ship = 0, ship_orientation = 0, ship_i = -1, ship_j = -1):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
@@ -273,6 +306,7 @@ class Cell:
         self.ship_i = ship_i
         self.ship_j = ship_j
 
+
     
     def change_state(self):
         if self.state == 0:
@@ -290,21 +324,27 @@ cells = []
 for  a in range (10):
     cells.append([])
     for b in range (10):
-        cells[a].append(Cell(a, b))
+        cells[a].append(Cell3(a, b))
 enemycells = []
 for  a in range (10):
     enemycells.append([])
     for b in range (10):
-        enemycells[a].append(Cell(a, b))
+        enemycells[a].append(Cell3(a, b))
 
-cells[0][0] = Cell(0, 0, 1, 1, 0, 0, 0)
-cells[1][0] = Cell(1, 0, 1, 1, 0, 0, 0)
-cells[2][0] = Cell(2, 0, 1, 1, 0, 0, 0)
-cells[3][0] = Cell(3, 0, 1, 1, 0, 0, 0)
+cells[0][0] = Cell3(0, 0, 3, 2, 0, 0, 0)
+cells[1][0] = Cell3(1, 0, 1, 2, 0, 0, 0)
+cells[2][0] = Cell3(2, 0, 1, 2, 0, 0, 0)
+cells[3][0] = Cell3(3, 0, 3, 2, 0, 0, 0)
+cells[4][4] = Cell3(4, 4, 2)
+
+enemycells[0][0] = Cell3(0, 0, 1, 2, 0, 0, 0)
+enemycells[1][0] = Cell3(1, 0, 1, 2, 0, 0, 0)
+enemycells[2][0] = Cell3(2, 0, 1, 2, 0, 0, 0)
+enemycells[3][0] = Cell3(3, 0, 1, 2, 0, 0, 0)
 
 pygame.init()
 screen = pygame.display.set_mode((1500, 500))
 
-win = Window(screen)
+win = Window(screen, cells, enemycells)
 win.main_loop()
 pygame.quit()
