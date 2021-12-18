@@ -72,6 +72,9 @@ class Ship (GraphObject):
         
             
 
+    def rotate(self, angle):
+        self.img = pygame.transform.rotate(self.img, angle)
+
 
 class Water (GraphObject):
     '''
@@ -196,7 +199,7 @@ class Smoke (GraphObject):
 
         self.stain_size = [stain + self.speed for stain in self.stain_size]
         for num in range(len(self.stain_size)):
-            self.surfaces[num].set_alpha(200-200*self.stain_size[num]/self.end_scale*4)
+            self.surfaces[num].set_alpha(200-200*self.stain_size[num]/self.end_scale*2)
             self.surfaces[num].fill('#000000')
             circle(self.surfaces[num], self.stain_color[num], (int(self.end_scale/2), int(self.end_scale/2)), self.stain_size[num])
             self.surfaces[num].set_colorkey('#000000')
