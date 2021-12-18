@@ -8,6 +8,7 @@ class GraphObject:
     def __init__ (self, x0, y0, x1, y1, obj_type, screen):
         '''
         инициализация графического объекта
+
         Args:
         x0 y0 - координаты левого верхнего угла
         x1 y1 - координаты правого нижнего угла
@@ -34,20 +35,23 @@ class Ship (GraphObject):
     def __init__(self, x0, y0, x1, y1, obj_type, screen, filename, turn_flag):
         '''
         инициализация корабля
+
         Args:
         x0 y0 - координаты левого верхнего угла
         x1 y1 - координаты правого нижнего угла
         obj_type - тип объекта
         screen
         filename - имя файла со скином
-        turn_flag - поворот (вертикальная ориентация - 1, else - 0)
+        turn_flag - поворот (вертикальная ориентация)
         '''
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
         self.img = pygame.image.load(filename).convert_alpha()
-        self.turn_flag = turn_flag
+        if turn_flag:
+            self.img = pygame.transform.rotate(self.img, 90)
         self.img = pygame.transform.scale(self.img, (self.x1-self.x0, self.y1-self.y0))
         self.img.set_colorkey('#00FF00')
+        self.img.set_alpha(200)
 
     def draw(self):
         '''
@@ -60,27 +64,10 @@ class Ship (GraphObject):
         '''
         Функция рисования тени корабля
         '''
-        '''- rot * (self.x1-self.x0)//2 '''
         self.img.set_alpha(100)
         position = pygame.mouse.get_pos()
-        rot = self.turn_flag
-        self.screen.blit(self.img, (position[0],position[1] - (1 - rot) *(self.y1-self.y0)//2))
-        
-        
-    def backtonormal(self):
-        '''
-        makes the picture of the ship full-coloured again
-        (fixes shadows)
-        '''
-        self.img.set_alpha(255)
-        
-    def rotate(self, angle):
-        '''
-        rotates the ship
-        
-        '''
-        self.img = pygame.transform.rotate(self.img, angle)
-        self.turn_flag  = (self.turn_flag + 1) % 2
+        self.screen.blit(self.img, (position[0]-(self.x1-self.x0)/2 ,position[1]-(self.y1-self.y0)/2))
+        self.img.set_alpha(200)
 
 
 class Water (GraphObject):
@@ -159,15 +146,21 @@ class Smoke (GraphObject):
     def __init__(self, x0, y0, x1, y1, obj_type, screen):
         '''
         Инициализация объекта класса Smoke
+
+        Args:
+        x0 y0 - координаты левого верхнего угла
+        x1 y1 - координаты правого нижнего угла
+        obj_type - тип объекта
+        screen
         '''
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
-        self.N = 5
-        self.begin_scale = 5
+        self.N = 10
+        self.begin_scale = 2
         self.end_scale = min((x1-x0), (y1-y0))
-        self.speed = 0.5
+        self.speed = 0.1
         self.COLORS = ['#999999']
-        self.frec = 0.1
+        self.frec = 0.5
 
         self.position_x = []
         self.position_y = []
@@ -184,7 +177,7 @@ class Smoke (GraphObject):
         time_difference = time.time() - self.time0
         if time_difference > self.frec:
             if len(self.stain_size):
-                if self.stain_size[0] >= self.end_scale/4:
+                if self.stain_size[0] >= self.end_scale/2:
                     self.position_x.pop(0)
                     self.position_y.pop(0)
                     self.stain_size.pop(0)
@@ -224,9 +217,9 @@ class WaterBlock (GraphObject):
         self.N = 5
         self.begin_scale = 5
         self.end_scale = min((x1-x0), (y1-y0))
-        self.speed = 1.5
+        self.speed = 1
         self.COLORS = [(0,204,255), (0,89,255), (0,255,216), (0,12,216)]
-        self.frec = 1
+        self.frec = 3
 
         self.position_x = []
         self.position_y = []
@@ -285,5 +278,10 @@ class Text (GraphObject):
 
     def draw(self):
 
-        font = pygame.font.SysFont('ComicSansMs', 30)
+        font = pygame.font.SysFont('arial', 30)
         self.screen.blit(font.render(self.text, 0, self.color), (self.x0, self.y0))
+    
+
+
+
+
