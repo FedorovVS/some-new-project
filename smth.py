@@ -103,7 +103,7 @@ def mousepos(cells:list):
         
      
 class Cell:
-    def __init__(self, i, j, x, y, state = 0, ship = 0):
+    def __init__(self, i, j, x, y, state = 0, ship = 0, warship = 0):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
@@ -123,6 +123,7 @@ class Cell:
         self.ship = ship
         self.x = x
         self.y = y
+        self.warship = warship
     
     def nowdead(self):
         self.state += 2

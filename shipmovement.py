@@ -25,9 +25,11 @@ def shiphere(cells:list, ship):
     if vertical == 0:
         for k in range (i, i + 4):
             cells[k][j].state = 1
+            cells[k][j].warship = ship
     if vertical == 1:
         for k in range (j, j + 4):
             cells[i][k].state = 1
+            cells[i][k].warship = ship
             
 def  placetheship(ship:Ship, cell:Cell, cells:list, screen):
     '''
