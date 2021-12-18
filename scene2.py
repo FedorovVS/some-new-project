@@ -1,27 +1,32 @@
 import pygame
 import numpy
 from smth import field_creation, caption_creation, mousepos, Cell, event_handler
-from gr1 import Ship
+from gr1 import Ship, WaterBlock
 from shipmovement import placetheship, whichship, shiphere
 
 def eventer(ships:list, cells:list, screen, FPS = 60):
     white = (255, 255, 255)
     black = (0, 0, 0)
     red = (255, 0, 0)
+    blue = (7, 11, 18)
     clock = pygame.time.Clock()
     finished = False
-
 #shipdefinition
     number = -1
-    while not finished: 
+    water1 = WaterBlock(420, 220, 780, 580, 1, screen)
+    water2 = WaterBlock(1120, 220, 1480, 580, 1, screen)
+    while not finished:         
         pygame.display.update()
         clock.tick(FPS)
-        screen.fill(black)
+        screen.fill(blue) 
+        water1.draw()
+        water2.draw()        
         for i, ship in enumerate(ships):
             ship.draw()
         field_creation(300, 100, 900, 700, screen)
-        field_creation(1000, 100, 1600, 700, screen)    
-        for event in pygame.event.get():
+        field_creation(1000, 100, 1600, 700, screen)       
+        pygame.display.update() 
+        for event in pygame.event.get():            
             if event.type == pygame.QUIT:
                 finished = True
             if pygame.key.get_pressed()[pygame.K_KP_ENTER]:
