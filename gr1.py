@@ -40,13 +40,12 @@ class Ship (GraphObject):
         obj_type - тип объекта
         screen
         filename - имя файла со скином
-        turn_flag - поворот (вертикальная ориентация)
+        turn_flag - поворот (вертикальная ориентация - 1, else - 0)
         '''
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
         self.img = pygame.image.load(filename).convert_alpha()
-        if turn_flag:
-            self.img = pygame.transform.rotate(self.img, 90)
+        self.turn_flag = turn_flag
         self.img = pygame.transform.scale(self.img, (self.x1-self.x0, self.y1-self.y0))
         self.img.set_colorkey('#00FF00')
 
@@ -61,9 +60,27 @@ class Ship (GraphObject):
         '''
         Функция рисования тени корабля
         '''
+        '''- rot * (self.x1-self.x0)//2 '''
         self.img.set_alpha(100)
         position = pygame.mouse.get_pos()
-        self.screen.blit(self.img, (position[0]-(self.x1-self.x0)/2 ,position[1]-(self.y1-self.y0)/2))
+        rot = self.turn_flag
+        self.screen.blit(self.img, (position[0],position[1] - (1 - rot) *(self.y1-self.y0)//2))
+        
+        
+    def backtonormal(self):
+        '''
+        makes the picture of the ship full-coloured again
+        (fixes shadows)
+        '''
+        self.img.set_alpha(255)
+        
+    def rotate(self, angle):
+        '''
+        rotates the ship
+        
+        '''
+        self.img = pygame.transform.rotate(self.img, angle)
+        self.turn_flag  = (self.turn_flag + 1) % 2
 
 
 class Water (GraphObject):
