@@ -260,12 +260,13 @@ class Button (GraphObject):
         self.screen.blit(font.render(self.text, 0, '#9932cc'), (self.x0+self.border, self.y0+self.border))
 
 class Text (GraphObject):
-    def __init__(self, x0, y0, x1, y1, obj_type, screen, text):
+    def __init__(self, x0, y0, x1, y1, obj_type, screen, text, color='#9932cc'):
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
         self.text = text
+        self.color = color
 
     def draw(self):
 
         font = pygame.font.SysFont('ComicSansMs', 30)
-        self.screen.blit(font.render(self.text, 0, '#9932cc'), (self.x0+self.border, self.y0+self.border))
+        self.screen.blit(font.render(self.text, 0, self.color), (self.x0, self.y0))
