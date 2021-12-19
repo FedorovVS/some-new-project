@@ -47,12 +47,13 @@ class Ship (GraphObject):
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
         self.img = pygame.image.load(filename).convert_alpha()
-        self.turn_flag = turn_flag
         if turn_flag:
             self.img = pygame.transform.rotate(self.img, 90)
         self.img = pygame.transform.scale(self.img, (self.x1-self.x0, self.y1-self.y0))
         self.img.set_colorkey('#00FF00')
         self.img.set_alpha(200)
+        self.turn_flag = turn_flag
+        self.type = int(filename[0])
 
     def draw(self):
         '''
@@ -69,8 +70,6 @@ class Ship (GraphObject):
         position = pygame.mouse.get_pos()
         self.screen.blit(self.img, (position[0] ,position[1]-(self.y1-self.y0)/2))
         self.img.set_alpha(200)
-        
-            
 
     def rotate(self, angle):
         self.img = pygame.transform.rotate(self.img, angle)
