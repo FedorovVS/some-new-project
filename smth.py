@@ -123,17 +123,9 @@ class Cell:
         self.ship = ship
         self.x = x
         self.y = y
-        self.warship = warship
-    
-    def nowdead(self):
-        self.state += 2
-        x = self.x
-        y = self.y
-        pygame.draw.line(screen, (255, 0, 0), (x, y), (x+60, y+60))
-        pygame.draw.line(screen, (255, 0, 0), (x, y+60), (x+60, y))
-        
+        self.warship = warship      
              
-        
+'''        
 cells = []
 for  a in range (10):
     cells.append([])
@@ -145,7 +137,6 @@ for  a in range (10):
     for b in range (10):
         enemycells[a].append(Cell(a, b, 1000 + 60 * a, 100 + 60 * b))
     
-'''     
 pygame.display.update()
 screen.fill(black)
 clock = pygame.time.Clock()
