@@ -1,21 +1,34 @@
 import pygame
-import numpy
-from smth import field_creation, caption_creation, mousepos, event_handler
+from gamestart import field_creation, mousepos
 from graphics import Ship, WaterBlock
 from shipmovement import placetheship, whichship, shiphere
 
-def eventer(ships:list, cells:list, screen, FPS = 60):
-    white = (255, 255, 255)
-    black = (0, 0, 0)
-    red = (255, 0, 0)
-    blue = (7, 11, 18)
+def clearall(cells:list):
+    '''
+    функция проверяет лежит ли в клетке корабль
+    если нет, то присваивает атрибуту ее состояния значение 0
+    '''
+    for i in range (len(cells)):
+        for j in range (len(cells[i])):
+            cells[i][j].clear()
+
+def check(ships:list, cells:list):
+    for a in range (len(ships)):
+        x, y = ships[a].x0, ships[a].y0
+        j, i = (x - 300) //60, (y-100) //60
+        print(i, j)
+
+
+def eventer(ships:list, cells:list, screen, FPS = 30):
+    blue = (0, 49, 83)
     clock = pygame.time.Clock()
     finished = False
-#shipdefinition
     number = -1
     water1 = WaterBlock(420, 220, 780, 580, 1, screen)
     water2 = WaterBlock(1120, 220, 1480, 580, 1, screen)
-    while not finished:         
+    while not finished:
+        clearall(cells)
+        check(ships, cells)
         pygame.display.update()
         clock.tick(FPS)
         screen.fill(blue) 
@@ -29,21 +42,18 @@ def eventer(ships:list, cells:list, screen, FPS = 60):
         for event in pygame.event.get():            
             if event.type == pygame.QUIT:
                 finished = True
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0] == 1:
                 number = whichship(ships)
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONUP and pygame.mouse.get_pressed()[0] == 0:
                 cell = mousepos(cells)
                 if cell != 0:
                     if placetheship(ships[number], cell, cells, screen) == 1:
-                        shiphere(cells,ships[number]) 
-                #ships[number].backtonormal()
-                    number = -1
-        if number != -1:
+                        shiphere(cells,ships[number])
+                    number = 10
+        if number != 10:
             ships[number].drawShadow()
-            if pygame.key.get_pressed()[pygame.K_LEFT]:
+            if pygame.mouse.get_pressed()[2] == 1:
                 ships[number].rotate(90)
                 ships[number].turn_flag = not(ships[number].turn_flag)
-            if pygame.key.get_pressed()[pygame.K_RIGHT]:
-                ships[number].rotate(180)
         if pygame.key.get_pressed()[pygame.K_RETURN]:
                 finished = True

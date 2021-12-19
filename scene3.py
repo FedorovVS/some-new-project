@@ -1,7 +1,6 @@
 import pygame
-from pygame.draw import ellipse, circle, polygon, rect, line
-from graphics import WaterBlock
-#from format import *
+from pygame.draw import rect
+from graphics import WaterBlock, Ship, Text, Smoke, EmptyCheck, Fire
 
 class Window():
     '''
@@ -39,7 +38,7 @@ class Window():
         '''
         Основной цвет
         '''
-        self.special_messages = [['hello!', 60, '#FFFFFF'], ['buddy', 70, '#FFFFFF'], ['yes', 80, '#FFFFFF']]
+        self.special_messages = [['hello!', 60, '#FFFFFF'], ['buddy', 70, '#FFFFFF'], ['shall we play?', 80, '#FFFFFF']]
         '''
         Список сообщений, подлежащих отображению
 
@@ -237,7 +236,7 @@ class Window():
             if clicked_cell:
                 click_result = clicked_cell.change_state()
                 if click_result == 1:
-                    self.special_messages.append(['Выберете другую клетку', 40, '#FF00FF'])
+                    self.special_messages.append(['Выберите другую клетку', 40, '#FF00FF'])
                 else:
                     self.control_graphic_objects(530, 30, cells, clicked_cell)
         if click_result == -1:

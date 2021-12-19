@@ -54,8 +54,6 @@ def event_handler(cells:list):
     '''
     changes the state of a cell, if one has been pressed on
     or must write that one had been killed already
-    
-    
     '''
     if mousepos(cells) != 0:      
         one = mousepos(cells)
@@ -97,4 +95,4 @@ def mousepos(cells:list):
             return 0    
     else:
         return 0
-                  
+

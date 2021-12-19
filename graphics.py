@@ -1,5 +1,5 @@
 import pygame 
-from pygame.draw import ellipse, circle, polygon, rect, line
+from pygame.draw import circle,  rect
 from random import randint, choice
 import time
 
@@ -13,7 +13,7 @@ class GraphObject:
         x0 y0 - координаты левого верхнего угла
         x1 y1 - координаты правого нижнего угла
         obj_type - тип объекта
-        screen
+        screen - экран, на котором объект будет отрисовываться
         '''
         self.x0 = x0
         self.y0 = y0
@@ -24,12 +24,10 @@ class GraphObject:
         self.time0 = time.time()
         self.origin = pygame.Surface((self.x1-self.x0, self.y1-self.y0))
 
-    def draw (self):
-        pass
 
 class Ship (GraphObject):
     '''
-    корбаль
+    корабль
     '''
 
     def __init__(self, x0, y0, x1, y1, obj_type, screen, filename, turn_flag):
@@ -40,9 +38,10 @@ class Ship (GraphObject):
         x0 y0 - координаты левого верхнего угла
         x1 y1 - координаты правого нижнего угла
         obj_type - тип объекта
-        screen
+        screen - кран, на котором объект будет отрисовываться
         filename - имя файла со скином
         turn_flag - поворот (вертикальная ориентация)
+        type - номер картинки корабля
         '''
         super().__init__(x0, y0, x1, y1, obj_type, screen)
 
@@ -59,7 +58,7 @@ class Ship (GraphObject):
         '''
         Функция рисования объекта
         '''
-        super().draw()
+
         self.screen.blit(self.img, (self.x0, self.y0))
 
     def drawShadow(self):
@@ -84,7 +83,6 @@ class Water (GraphObject):
         '''
         Функция рисования объекта
         '''
-        super().draw()
 
         COLORS = [(0,204,255), (0,89,255), (0,255,216), (0,12,216)]
 
@@ -122,7 +120,6 @@ class Stressing (GraphObject):
         '''
         Функция рисования объекта
         '''
-        super().draw()
 
         additional_surface = pygame.Surface((self.x1-self.x0, self.y1-self.y0))
         additional_surface.set_alpha(150)  # прозрачность
@@ -137,7 +134,7 @@ class EmptyCheck (GraphObject):
         '''
         Функция рисования объекта
         '''
-        super().draw()
+
 
         additional_surface = pygame.Surface((self.x1-self.x0, self.y1-self.y0))
         additional_surface.set_alpha(150)
@@ -177,7 +174,6 @@ class Smoke (GraphObject):
         '''
         Функция рисования объекта
         '''
-        super().draw()
 
         time_difference = time.time() - self.time0
         if time_difference > self.frec:
@@ -233,7 +229,6 @@ class WaterBlock (GraphObject):
         self.surfaces = []
 
     def draw(self):
-        super().draw()
 
         time_difference = time.time() - self.time0
         if time_difference > self.frec:

@@ -1,6 +1,5 @@
 import pygame
-import numpy
-from smth import field_creation, caption_creation, mousepos, write
+from gamestart import mousepos
 from graphics import Ship
 from format import Cell
 
