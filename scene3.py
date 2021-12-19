@@ -1,6 +1,7 @@
 import pygame
 from pygame.draw import ellipse, circle, polygon, rect, line
-from gr1 import *
+from graphics import WaterBlock
+#from format import *
 
 class Window():
     '''
@@ -48,13 +49,14 @@ class Window():
         time : int - временные отсчеты до удаления
         color : str - цвет сообщения
         '''
-        self.graphic_objects = [WaterBlock(i*self.H, 0, (i+1)*self.H, self.H, 1, self.screen) for i in range(3)]
+        self.graphic_objects = [WaterBlock(int(i*self.W/3), 0, int((i+1)*self.W/3), self.H, 1, self.screen) for i in range(3)]
         '''
         Список графических сущностей
         '''
 
         self.friendly_cells = friendly_cells
         self.enemy_cells = enemy_cells
+        self.score = 0
 
     def GR_draw_caption(self, x0, y0):
         '''
@@ -211,6 +213,7 @@ class Window():
                                                     (y0+(active_cell.ship_j+1)*self.check_size), 
                                                     1, self.screen, str(active_cell.ship)+'.png', active_cell.ship_orientation))
                 fire_cell(self, x0, y0, cells, active_cell.i, active_cell.j)
+                self.score += 1
 
 
 
@@ -227,6 +230,8 @@ class Window():
         cells : list - список объектов клеток
         event : pygame.event - событие
         '''
+        click_result = -3
+
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             clicked_cell = self.mouse_position(cells, 530, 30)
             if clicked_cell:
@@ -235,6 +240,10 @@ class Window():
                     self.special_messages.append(['Выберете другую клетку', 40, '#FF00FF'])
                 else:
                     self.control_graphic_objects(530, 30, cells, clicked_cell)
+        if click_result == -1:
+            return 1
+        else:
+            return 0
 
     def control_friendly_objects(self, cells, X0, Y0):
 
@@ -268,7 +277,7 @@ class Window():
     def main_loop(self):
 
         clock = pygame.time.Clock()
-        finished = False
+        finished = 0
 
         while not finished:
             self.MG_graphics_manager()
@@ -280,71 +289,16 @@ class Window():
                 if event.type == pygame.QUIT:
                     finished = True
                 else:
-                    self.MG_event_manager(self.enemy_cells, event)
+                   finished = self.MG_event_manager(self.enemy_cells, event)
 
-class Cell3:
-    def __init__(self, i, j,  state = 0, ship = 0, ship_orientation = 0, ship_i = -1, ship_j = -1):
-        """ Конструктор класса Cell
-        Args:
-        i - first number of the cell in array
-        j - second number of the cell in array
-        state describes if the cell contains ship, whether it's dead etc.:
-        0 - empty and has not been shot
-        1 - has ship in it and is alive
-        2 - empty, now dead
-        3 - had ship in it, now dead
-        parameter 'ship' describes what type of ship lies in the cell
-        x, y - position of the top left corner 
-        mouse - shows whether the mouse is on the cell
-        """
-        self.i = i
-        self.j = j
-        self.state = state
-        self.ship = ship
-        self.obj_type = 0
-        self.ship_orientation = ship_orientation
-        self.ship_i = ship_i
-        self.ship_j = ship_j
+        time = 30
 
+        while time:
+            time -= 1
+            self.MG_graphics_manager()
+            pygame.display.update()
+            clock.tick(self.FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    finished = True
 
-    
-    def change_state(self):
-        if self.state == 0:
-            self.state = 2
-            return 0
-        elif self.state == 1:
-            self.state = 3
-            return 0
-        else:
-            return 1
-        
-             
-        
-cells = []
-for  a in range (10):
-    cells.append([])
-    for b in range (10):
-        cells[a].append(Cell3(a, b))
-enemycells = []
-for  a in range (10):
-    enemycells.append([])
-    for b in range (10):
-        enemycells[a].append(Cell3(a, b))
-
-cells[0][0] = Cell3(0, 0, 3, 2, 0, 0, 0)
-cells[1][0] = Cell3(1, 0, 1, 2, 0, 0, 0)
-cells[2][0] = Cell3(2, 0, 1, 2, 0, 0, 0)
-cells[3][0] = Cell3(3, 0, 3, 2, 0, 0, 0)
-cells[4][4] = Cell3(4, 4, 2)
-
-enemycells[0][0] = Cell3(0, 0, 1, 2, 0, 0, 0)
-enemycells[1][0] = Cell3(1, 0, 1, 2, 0, 0, 0)
-enemycells[2][0] = Cell3(2, 0, 1, 2, 0, 0, 0)
-enemycells[3][0] = Cell3(3, 0, 1, 2, 0, 0, 0)
-
-pygame.init()
-screen = pygame.display.set_mode((1500, 500))
-
-win = Window(screen, cells, enemycells)
-win.main_loop()
-pygame.quit()

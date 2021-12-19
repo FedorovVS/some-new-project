@@ -1,7 +1,8 @@
 import pygame
 import numpy
-from smth import field_creation, caption_creation, mousepos, Cell, write
-from gr1 import Ship
+from smth import field_creation, caption_creation, mousepos, write
+from graphics import Ship
+from format import Cell
 
 
 
@@ -16,8 +17,6 @@ window_height = 800
 def shiphere(cells:list, ship):
     '''
     position describes position of the ship
-    
-    
     '''
     mousepos(cells).state = 1
     vertical = ship.turn_flag
@@ -52,13 +51,13 @@ def  placetheship(ship:Ship, cell:Cell, cells:list, screen):
             notfree = 1
         minj = max(j-1, 0)
         maxj = min(j+5, 10)
-        for b in range (minj, maxj):
+        for a in range (minj, maxj):
             mini = max(0, i-1)
             maxi = min(10, i+2)
-            for a in range (mini, maxi):
+            for b in range (mini, maxi):
                 notfree += cells[a][b].state
     if notfree != 0:
-       pass
+       return 0
        #may be write smth like "not possible"
     if notfree == 0:
         x, y = cell.x, cell.y
@@ -78,7 +77,8 @@ def  placetheship(ship:Ship, cell:Cell, cells:list, screen):
     
 def whichship(ships):
     '''
-    
+    Возвращает порядковый номер корабля из списка,
+    в который зафиксировано попадание
     '''
     x, y = pygame.mouse.get_pos()
     for i, ship in enumerate(ships):

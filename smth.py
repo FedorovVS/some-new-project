@@ -1,6 +1,4 @@
 import pygame
-import numpy
-from gr1 import Ship
 
 window_width = 1700
 """Ширина окна"""
@@ -99,59 +97,4 @@ def mousepos(cells:list):
             return 0    
     else:
         return 0
-    
-        
-     
-class Cell:
-    def __init__(self, i, j, x, y, state = 0, ship = 0, warship = 0):
-        """ Конструктор класса Cell
-        Args:
-        i - first number of the cell in array
-        j - second number of the cell in array
-        state describes if the cell contains ship, whether it's dead etc.:
-        0 - empty and has not been shot
-        1 - has ship in it and is alive
-        2 - empty, now dead
-        3 - had ship in it, now dead
-        parameter 'ship' describes what type of ship lies in the cell
-        x, y - position of the top left corner 
-        mouse - shows whether the mouse is on the cell
-        """
-        self.i = i
-        self.j = j
-        self.state = state
-        self.ship = ship
-        self.x = x
-        self.y = y
-        self.warship = warship      
-             
-'''        
-cells = []
-for  a in range (10):
-    cells.append([])
-    for b in range (10):
-        cells[a].append(Cell(a, b, 300 + 60 * a, 100 + 60 * b))
-enemycells = []
-for  a in range (10):
-    enemycells.append([])
-    for b in range (10):
-        enemycells[a].append(Cell(a, b, 1000 + 60 * a, 100 + 60 * b))
-    
-pygame.display.update()
-screen.fill(black)
-clock = pygame.time.Clock()
-finished = False
-
-while not finished:
-    pygame.display.update()
-    clock.tick(FPS)
-    field_creation(300, 100, 900, 700)
-    field_creation(1000, 100, 1600, 700)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            finished = True
-        event_handler(cells)
-        event_handler(enemycells)
-
-pygame.quit()
-'''
+                  

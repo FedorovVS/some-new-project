@@ -1,7 +1,7 @@
 import pygame
 import numpy
-from smth import field_creation, caption_creation, mousepos, Cell, event_handler
-from gr1 import Ship, WaterBlock
+from smth import field_creation, caption_creation, mousepos, event_handler
+from graphics import Ship, WaterBlock
 from shipmovement import placetheship, whichship, shiphere
 
 def eventer(ships:list, cells:list, screen, FPS = 60):
@@ -21,15 +21,13 @@ def eventer(ships:list, cells:list, screen, FPS = 60):
         screen.fill(blue) 
         water1.draw()
         water2.draw()        
-        for i, ship in enumerate(ships):
+        for ship in ships:
             ship.draw()
         field_creation(300, 100, 900, 700, screen)
         field_creation(1000, 100, 1600, 700, screen)       
         pygame.display.update() 
         for event in pygame.event.get():            
             if event.type == pygame.QUIT:
-                finished = True
-            if pygame.key.get_pressed()[pygame.K_KP_ENTER]:
                 finished = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 number = whichship(ships)
@@ -44,5 +42,8 @@ def eventer(ships:list, cells:list, screen, FPS = 60):
             ships[number].drawShadow()
             if pygame.key.get_pressed()[pygame.K_LEFT]:
                 ships[number].rotate(90)
+                ships[number].turn_flag = not(ships[number].turn_flag)
             if pygame.key.get_pressed()[pygame.K_RIGHT]:
                 ships[number].rotate(180)
+        if pygame.key.get_pressed()[pygame.K_RETURN]:
+                finished = True
