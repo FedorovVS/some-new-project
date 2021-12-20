@@ -14,13 +14,6 @@ def clearall(cells: list):
             cells[i][j].clear()
 
 
-def check(ships: list, cells: list):
-    for a in range(len(ships)):
-        x, y = ships[a].x0, ships[a].y0
-        j, i = (x - 300) // 60, (y - 100) // 60
-        print(i, j)
-
-
 def eventer(ships: list, cells: list, screen, FPS=30):
     blue = (0, 49, 83)
     clock = pygame.time.Clock()

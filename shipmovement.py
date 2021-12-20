@@ -14,6 +14,8 @@ window_height = 800
 def shiphere(cells: list, ship):
     '''
     position describes position of the ship
+    cells - массив клеток поля
+    ship - корабль, положение которого нужно изменить
     '''
     mousepos(cells).state = 1
     vertical = ship.turn_flag
@@ -31,6 +33,10 @@ def shiphere(cells: list, ship):
 def placetheship(ship: Ship, cell: Cell, cells: list, screen):
     '''
     changes coordinates of the ship
+     ship - корабль, который помещается в 4 клетки, начиная с cell
+     cell - левая или верхняя клетка(в зависимости от положения корабля), в которую нужно поместить его
+     cells - массив клеток поля
+     screen - экран, на котором рисуются клетки и корабль
     '''
     i, j = cell.i, cell.j
     notfree = 0
@@ -56,7 +62,6 @@ def placetheship(ship: Ship, cell: Cell, cells: list, screen):
                 notfree += cells[a][b].state
     if notfree != 0:
         return 0
-        # may be write smth like "not possible"
     if notfree == 0:
         x, y = cell.x, cell.y
         ship.x0 = x
@@ -76,8 +81,8 @@ def placetheship(ship: Ship, cell: Cell, cells: list, screen):
 
 def whichship(ships):
     '''
-    Возвращает порядковый номер корабля из списка,
-    в который зафиксировано попадание
+    Возвращает порядковый номер корабля,
+    в который зафиксировано попадание(над ним находится мышка в данный момент), из списка
     '''
     x, y = pygame.mouse.get_pos()
     for i, ship in enumerate(ships):
