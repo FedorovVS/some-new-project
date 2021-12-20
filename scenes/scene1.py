@@ -1,5 +1,5 @@
 import pygame
-from graphics import Text
+from lib.graphics import Text
 
 
 def pure_screen(screen, text: str):

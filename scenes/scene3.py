@@ -1,6 +1,6 @@
 import pygame
 from pygame.draw import rect
-from graphics import WaterBlock, Ship, Text, Smoke, EmptyCheck, Fire
+from lib.graphics import WaterBlock, Ship, Text, Smoke, EmptyCheck, Fire
 
 
 class Window():

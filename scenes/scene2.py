@@ -1,7 +1,7 @@
 import pygame
 from gamestart import field_creation, mousepos
-from graphics import Ship, WaterBlock
-from shipmovement import placetheship, whichship, shiphere
+from lib.graphics import Ship, WaterBlock
+from lib.shipmovement import placetheship, whichship, shiphere
 
 
 def clearall(cells: list):
