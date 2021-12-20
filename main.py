@@ -1,8 +1,8 @@
 import pygame
 from graphics import Ship, Text
-from scene1 import pure_screen
-from scene2 import eventer
-from scene3 import Window
+from scenes.scene1 import pure_screen
+from scenes.scene2 import eventer
+from scenes.scene3 import Window
 from format import Cell, Cell3, convert_Cell_to_Cell3_list
 
 
