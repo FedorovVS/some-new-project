@@ -4,6 +4,7 @@ the last task for the first semestr.
 Тут лежит игра морской бой.  
 
 ## Зачем это нужно?  
+![alt text](https://github.com/diljara/pancake/blob/main/2.jpg)
 
 Это наш проект по ППП. С его помощью мы продемонстрировали полученные навыки по ООП, работе с git'ом.  
 
