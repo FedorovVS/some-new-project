@@ -15,4 +15,4 @@ the last task for the first semestr.<br\>
 Игроки ходят по очереди. В зависимости от успешности попадания появляются различные картинки на месте корабля(дым, огонь, просто красная клетка).<br\>
 Побеждает тот, кто первым уничтожит 5 кораблей противника.<br\>
 
-![Image alt](https://github.com/{diljara}/{pancake}/raw/{main}/изображение.png)
+![alt text](https://github.com/diljara/pancake/blob/main/%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5.png)
