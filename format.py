@@ -1,5 +1,6 @@
 class Cell3:
-    def __init__(self, i, j,  state = 0, ship = 0, ship_orientation = 0, ship_i = -1, ship_j = -1):
+    def __init__(self, i, j, state=0, ship=0,
+                 ship_orientation=0, ship_i=-1, ship_j=-1):
         """ Конструктор класса Cell
         Args:
         i - first number of the cell in array
@@ -10,7 +11,7 @@ class Cell3:
         2 - empty, now dead
         3 - had ship in it, now dead
         parameter 'ship' describes what type of ship lies in the cell
-        x, y - position of the top left corner 
+        x, y - position of the top left corner
         mouse - shows whether the mouse is on the cell
         """
         self.i = i
@@ -22,8 +23,6 @@ class Cell3:
         self.ship_i = ship_i
         self.ship_j = ship_j
 
-
-    
     def change_state(self):
         '''
         функция меняет состояние клетки
@@ -38,7 +37,8 @@ class Cell3:
             return 0
         else:
             return 1
-        
+
+
 class Cell:
     def __init__(self, i, j, x, y, state=0, ship=0, warship=0):
         """ Конструктор класса Cell
@@ -51,7 +51,7 @@ class Cell:
         2 - empty, now dead
         3 - had ship in it, now dead
         parameter 'ship' describes what type of ship lies in the cell
-        x, y - position of the top left corner 
+        x, y - position of the top left corner
         warship - ship that stands oh this cell
         """
         self.i = i
@@ -66,18 +66,26 @@ class Cell:
         if self.warship == 0:
             self.state = 0
 
-def convert_Cell_to_Cell3_list(cell_list:list):
+
+def convert_Cell_to_Cell3_list(cell_list: list):
     '''
     функция конвертирует элементы исходного массива в объекты класса Cell3
     на вход подается массив
     '''
     result = []
-    for i,a in enumerate(cell_list):
+    for i, a in enumerate(cell_list):
         result.append([])
         for b in a:
             if b.state == 1 or b.state == 3:
-                check_size = min(b.warship.x1-b.warship.x0, b.warship.y1-b.warship.y0)
-                result[i].append(Cell3(b.i, b.j, int(b.state), b.warship.type, b.warship.turn_flag, b.i - (b.x-b.warship.x0)//check_size, b.j - (b.y-b.warship.y0)//check_size))
+                check_size = min(b.warship.x1 - b.warship.x0,
+                                 b.warship.y1 - b.warship.y0)
+                result[i].append(Cell3(b.i,
+                                       b.j,
+                                       int(b.state),
+                                       b.warship.type,
+                                       b.warship.turn_flag,
+                                       b.i - (b.x - b.warship.x0) // check_size,
+                                       b.j - (b.y - b.warship.y0) // check_size))
             else:
                 result[i].append(Cell3(b.i, b.j))
 

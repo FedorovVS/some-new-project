@@ -1,6 +1,7 @@
 import pygame
 from graphics import Text
 
+
 def pure_screen(screen, text: str):
     '''
     функция рисует заставку

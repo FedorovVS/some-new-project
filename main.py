@@ -23,47 +23,51 @@ screen.fill((0, 0, 0))
 clock = pygame.time.Clock()
 finished = False
 
-#shipdefinition
+# shipdefinition
 number = -1
 ships = []
-for i in range (0, 5):
+for i in range(0, 5):
     k = i + 1
     if i == 4:
         k = 1
-    ships.append(Ship(0, i*60, 240, (i+1) * 60, 1, screen, '{name}.png'.format(name=str(k)), 0))
+    ships.append(Ship(0, i * 60, 240, (i + 1) * 60, 1, screen,
+                 '{name}.png'.format(name=str(k)), 0))
 
-#fielddefinition
+# fielddefinition
 cells = []
-for  a in range (10):
+for a in range(10):
     cells.append([])
-    for b in range (10):
+    for b in range(10):
         cells[a].append(Cell(a, b, 300 + 60 * a, 100 + 60 * b))
 enemycells = []
-for  a in range (10):
+for a in range(10):
     enemycells.append([])
-    for b in range (10):
+    for b in range(10):
         enemycells[a].append(Cell(a, b, 1000 + 60 * a, 100 + 60 * b))
 
-#shippositioningfirstplayer:
+# shippositioningfirstplayer:
 eventer(ships, cells, screen)
 
-#shippositioningsecondplayerini
+# shippositioningsecondplayerini
 pure_screen(screen, 'Теперь следующий игрок расставляет корабли')
 
 ENEMYships = []
-for i in range (0, 5):
+for i in range(0, 5):
     k = i + 1
     if i == 4:
         k = 1
-    ENEMYships.append(Ship(0, i*60, 240, (i+1) * 60, 1, screen, '{name}.png'.format(name=str(k)), 0))
+    ENEMYships.append(Ship(0, i * 60, 240, (i + 1) * 60, 1,
+                      screen, '{name}.png'.format(name=str(k)), 0))
 eventer(ENEMYships, enemycells, screen)
 cells = convert_Cell_to_Cell3_list(cells)
 enemycells = convert_Cell_to_Cell3_list(enemycells)
 
 player1_window = Window(screen, cells, enemycells)
 player2_window = Window(screen, enemycells, cells)
-pure_screen(screen, 'Начинается основной этап игры. Чтобы было веселее играть, сделаем фон менее мрачным.')
-while 1:
+pure_screen(
+    screen,
+    'Начинается основной этап игры. Чтобы было веселее играть, сделаем фон менее мрачным.')
+while True:
     player1_window.main_loop()
     if player1_window.score == 5:
         pure_screen(screen, 'Победил игрок 1, с чем мы его и поздравляем : D ')
@@ -73,6 +77,6 @@ while 1:
     if player2_window.score == 5:
         pure_screen(screen, 'Победил игрок 2, с чем мы его и поздравляем :*) ')
         pygame.quit()
-    pure_screen(screen, 'Теперь следующий игрок делает выстрел (:\/) ')
-        
+    pure_screen(screen, 'Теперь следующий игрок делает выстрел (:\\/) ')
+
 pygame.quit()
