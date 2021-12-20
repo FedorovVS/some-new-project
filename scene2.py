@@ -23,7 +23,6 @@ def eventer(ships: list, cells: list, screen, FPS=30):
     water2 = WaterBlock(1120, 220, 1480, 580, 1, screen)
     while not finished:
         clearall(cells)
-        check(ships, cells)
         pygame.display.update()
         clock.tick(FPS)
         screen.fill(blue)
