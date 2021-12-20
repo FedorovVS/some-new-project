@@ -1,5 +1,5 @@
 import pygame
-from gamestart import field_creation, mousepos
+from lib.gamestart import field_creation, mousepos
 from lib.graphics import Ship, WaterBlock
 from lib.shipmovement import placetheship, whichship, shiphere
 
